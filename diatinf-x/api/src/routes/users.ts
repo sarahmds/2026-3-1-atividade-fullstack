@@ -14,10 +14,16 @@ router.get('/:username', async (req, res) => {
 
   const posts = await query(
     `SELECT p.id, p.content, p.created_at,
-            COALESCE(ROUND(AVG(r.stars), 1), 0) AS rating
-     FROM posts p LEFT JOIN ratings r ON r.post_id = p.id
+            u.username, u.name,
+            COALESCE(ROUND(AVG(r.stars), 1), 0) AS rating,
+            COUNT(DISTINCT c.id)::int AS comments
+     FROM posts p
+     JOIN users u ON u.id = p.user_id
+     LEFT JOIN ratings r ON r.post_id = p.id
+     LEFT JOIN comments c ON c.post_id = p.id
      WHERE p.user_id = $1
-     GROUP BY p.id ORDER BY p.created_at DESC`,
+     GROUP BY p.id, u.id
+     ORDER BY p.created_at DESC`,
     [user.rows[0].id]
   );
 

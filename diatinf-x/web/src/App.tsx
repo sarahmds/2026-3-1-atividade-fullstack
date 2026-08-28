@@ -7,11 +7,7 @@ import { api, type Post, type PostDetail, type UserProfile } from './api';
 
 type Screen = 'feed' | 'new' | 'post' | 'profile' | 'search' | 'login';
 
-const demoPosts: Post[] = [
-  { id: 1, content: 'Hoje tivemos uma ótima palestra sobre Programação Orientada a Serviços na DIATINF! 🚀', username: 'joaosilva', name: 'João Silva', rating: 3, comments: 5, created_at: new Date().toISOString() },
-  { id: 2, content: 'Dica de estudo: foquem na prática e nos projetos. Isso faz toda a diferença! 💻', username: 'marianacode', name: 'Mariana Code', rating: 2, comments: 3, created_at: new Date().toISOString() },
-  { id: 3, content: 'Alguém tem material sobre Docker para indicar? Obrigado!', username: 'carlosteck', name: 'Carlos Teck', rating: 3, comments: 1, created_at: new Date().toISOString() }
-];
+const demoPosts: Post[] = [];
 
 function Stars({ value, interactive = false, onSelect }: { value: number; interactive?: boolean; onSelect?: (n: number) => void }) {
   return <span className="stars">{[1, 2, 3].map(n =>
@@ -46,8 +42,8 @@ function Nav({ screen, go }: { screen: Screen; go: (s: Screen) => void }) {
 }
 
 function Login({ onLogin }: { onLogin: () => void }) {
-  const [username, setUsername] = useState('joaosilva');
-  const [password, setPassword] = useState('123456');
+  const [username, setUsername] = useState('sarah');
+  const [password, setPassword] = useState('123');
   const [error, setError] = useState('');
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -59,7 +55,7 @@ function Login({ onLogin }: { onLogin: () => void }) {
     } catch (err) { setError(err instanceof Error ? err.message : 'Falha no login.'); }
   }
   return <main className="login-page"><div className="login-card">
-    <div className="brand">DIATINF <b>✕</b></div>
+    <img className="login-logo" src="/icon.svg" alt="DIATINF X" />
     <p>Conecte-se, compartilhe e aprenda.</p>
     <form onSubmit={submit}>
       <input value={username} onChange={e => setUsername(e.target.value)} placeholder="Usuário" />
@@ -67,7 +63,7 @@ function Login({ onLogin }: { onLogin: () => void }) {
       {error && <div className="error">{error}</div>}
       <button className="primary">ENTRAR</button>
     </form>
-    <small>Demo: joaosilva / 123456</small>
+    <small>Demo: sarah / 123</small>
   </div></main>;
 }
 
@@ -81,23 +77,23 @@ export default function App() {
 
   async function loadPosts(q = '') {
     try { setPosts(await api.posts(q)); }
-    catch { setPosts(demoPosts); }
+    catch { setPosts([]); }
   }
 
   useEffect(() => { if (logged) loadPosts(); }, [logged]);
 
   async function openPost(id: number) {
     try { setSelected(await api.post(id)); } catch {
-      const post = posts.find(p => p.id === id) || demoPosts.find(p => p.id === id);
+      const post = posts.find((p) => p.id === id);
       if (post) setSelected({ ...post, user_id: 1, comments: [] });
     }
     setScreen('post');
   }
 
   async function openProfile() {
-    const username = JSON.parse(localStorage.getItem('diatinf_user') || '{"username":"joaosilva"}').username;
+    const username = JSON.parse(localStorage.getItem('diatinf_user') || '{"username":"sarah"}').username;
     try { setProfile(await api.user(username)); }
-    catch { setProfile({ id: 1, username, name: 'João Silva', bio: 'Estudante de Informática para Internet na DIATINF.', avatar_url: '', posts: posts.slice(0, 2) }); }
+    catch { setProfile({ id: 1, username, name: 'Sarah', bio: 'Estudante de Informática para Internet na DIATINF.', avatar_url: '', posts: [] }); }
     setScreen('profile');
   }
 
@@ -108,7 +104,7 @@ export default function App() {
   return <div className="app-shell">
     <header className="topbar">
       {screen !== 'feed' ? <button className="icon-btn" onClick={() => setScreen('feed')}><ArrowLeft/></button> : <button className="icon-btn"><Menu/></button>}
-      <div className="brand">DIATINF <b>✕</b></div>
+      <div className="brand-wrap"><img className="header-logo" src="/logo.svg" alt="DIATINF X" /></div>
       <button className="icon-btn" onClick={() => { localStorage.removeItem('diatinf_token'); setLogged(false); }}><LogOut/></button>
     </header>
 
@@ -172,7 +168,39 @@ function PostDetailView({ post, onRefresh }: { post: PostDetail; onRefresh: () =
 
 function Profile({ profile, onOpen }: { profile: UserProfile | null; onOpen: (id: number) => void }) {
   if (!profile) return <div className="empty">Carregando perfil...</div>;
-  return <section><div className="profile-hero"><div className="avatar profile-avatar">{profile.name.charAt(0)}</div><h2>{profile.name}</h2><p>@{profile.username}</p><span>{profile.bio}</span><div className="profile-stats"><b>{profile.posts.length}<small>Publicações</small></b><b>56<small>Seguidores</small></b><b>38<small>Seguindo</small></b></div></div><h2 className="section-title">Publicações</h2>{profile.posts.map(p => <PostCard key={p.id} post={p} onOpen={onOpen}/>)}</section>;
+
+  return <section className="profile-page">
+    <div className="profile-hero">
+      <div className="avatar profile-avatar">{profile.name.charAt(0)}</div>
+      <h2>{profile.name}</h2>
+      <p>@{profile.username}</p>
+      <span>{profile.bio || 'Sem bio adicionada.'}</span>
+      <div className="profile-stats">
+        <b>{profile.posts.length}<small>Publicações</small></b>
+        <b>56<small>Seguidores</small></b>
+        <b>38<small>Seguindo</small></b>
+      </div>
+    </div>
+
+    <h2 className="section-title">Minhas publicações</h2>
+    {profile.posts.length ? (
+      <div className="feed">{profile.posts.map((post) => (
+        <PostCard
+          key={post.id}
+          post={{
+            ...post,
+            username: post.username ?? profile.username,
+            name: post.name ?? profile.name,
+            comments: Number(post.comments ?? 0),
+            rating: Number(post.rating ?? 0)
+          }}
+          onOpen={onOpen}
+        />
+      ))}</div>
+    ) : (
+      <div className="empty">Você ainda não publicou nada.</div>
+    )}
+  </section>;
 }
 
 function SearchView({ query, setQuery, posts, onSearch, onOpen }: { query: string; setQuery: (v: string) => void; posts: Post[]; onSearch: (q: string) => void; onOpen: (id: number) => void }) {

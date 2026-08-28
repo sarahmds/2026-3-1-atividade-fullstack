@@ -46,7 +46,10 @@ export interface Post {
 export interface Comment {
   id: number; content: string; parent_id: number | null; created_at: string; username: string; name: string;
 }
-export interface PostDetail extends Post { user_id: number; comments: Comment[]; }
+export interface PostDetail extends Omit<Post, 'comments'> {
+  user_id: number;
+  comments: Comment[];
+}
 export interface UserProfile {
   id: number; username: string; name: string; bio: string; avatar_url: string; posts: Post[];
 }
