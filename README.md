@@ -11,7 +11,9 @@
 
 ---
 ## Relato da atividade
-Nome do aluno e seu link do linkedin e github
+### Aluna
+Sarah Medeiros dos Santos
+#### Github: https://github.com/sarahmds
 
 ### Componentes e tecnologias
 
