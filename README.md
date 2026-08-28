@@ -49,7 +49,21 @@ A aplicação será uma réplica simplificada do **X**, denominada **DIATINF X**
 
 ### Agente de IA
 
-Qual e como utilizou a IA?
+Durante o desenvolvimento do projeto, foram utilizadas ferramentas de Inteligência Artificial como apoio à implementação, configuração, análise e resolução de problemas.
+
+Foi utilizado o **ChatGPT** para:
+- auxiliar na organização e atualização do README.md;
+- orientar a configuração e execução do frontend e backend;
+- auxiliar na configuração do banco de dados PostgreSQL utilizando Docker;
+- orientar os testes das rotas da API utilizando `curl`;
+- investigar o erro `Failed to fetch` apresentado pelo frontend;
+- analisar a comunicação entre o frontend React/Vite e o backend Express;
+- orientar a configuração do proxy do Vite para encaminhar as requisições `/api` para o backend;
+- auxiliar na identificação e correção de erros durante a execução do projeto.
+
+Também foi utilizado o **GitHub Copilot**, integrado ao GitHub Codespaces, para analisar o código do projeto e investigar o fluxo de autenticação. O Copilot analisou os arquivos do frontend e backend, verificou as rotas de login e a configuração do proxy e realizou alterações relacionadas ao tratamento de requisições e à configuração do Vite.
+
+As ferramentas de IA foram utilizadas como **apoio ao desenvolvimento**, sendo as alterações e comandos executados e testados no ambiente do projeto.
 
 
 ### Execução do projeto
