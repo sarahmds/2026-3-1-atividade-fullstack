@@ -17,8 +17,6 @@ Sarah Medeiros dos Santos
 
 ### Componentes e tecnologias
 
-### Componentes e tecnologias
-
 O projeto será desenvolvido utilizando uma arquitetura **fullstack**, com frontend web e backend disponibilizados no mesmo repositório.
 
 #### Frontend
