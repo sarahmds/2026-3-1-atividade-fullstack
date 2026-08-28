@@ -116,7 +116,6 @@ export default function App() {
       <div className="page-title"><h1>{title}</h1><Sparkles size={20}/></div>
 
       {screen === 'feed' && <>
-        <div className="search-box"><Search size={18}/><input placeholder="Buscar publicações..." onChange={e => { setQuery(e.target.value); loadPosts(e.target.value); }}/></div>
         <div className="feed">{posts.map(p => <PostCard key={p.id} post={p} onOpen={openPost}/>)}</div>
         <button className="floating" onClick={() => setScreen('new')}><Plus/></button>
       </>}
@@ -143,8 +142,6 @@ function NewPost({ onDone }: { onDone: () => void }) {
     <textarea maxLength={500} value={text} onChange={e => setText(e.target.value)} placeholder="O que você quer compartilhar?" />
     <div className="counter">{text.length}/500</div>
     {error && <div className="error">{error}</div>}
-    <div className="rate-label">Avalie esta publicação</div>
-    <Stars value={3} interactive />
     <button className="primary" onClick={publish}>PUBLICAR</button>
   </section>;
 }
