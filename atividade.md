@@ -9,7 +9,7 @@
   
 ---
 ## Tarefas
-- [ ] Fork desse respositório;
+- [X] Fork desse respositório;
 - [ ] Atualize os textos de README.md com seu nome e links do github e linkedin;
 - [ ] Decida e atualize em README.md o texto sobre os componentes/tecnologias;
 - [ ] Construa / Defina o protótipo de intergafe gráfica web para o aplicativo;
